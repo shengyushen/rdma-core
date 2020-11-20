@@ -81,15 +81,15 @@ enum ibv_node_type {
 	IBV_NODE_CA 		= 1,
 	IBV_NODE_SWITCH,
 	IBV_NODE_ROUTER,
-	IBV_NODE_RNIC,
-	IBV_NODE_USNIC,
+	IBV_NODE_RNIC, // SSY RDMA capable NIC
+	IBV_NODE_USNIC, // SSY cisco device NIC
 	IBV_NODE_USNIC_UDP,
 };
 
 enum ibv_transport_type {
 	IBV_TRANSPORT_UNKNOWN	= -1,
-	IBV_TRANSPORT_IB	= 0,
-	IBV_TRANSPORT_IWARP,
+	IBV_TRANSPORT_IB	= 0, // SSY RoCE is also IB?
+	IBV_TRANSPORT_IWARP, // SSY IWARP also support
 	IBV_TRANSPORT_USNIC,
 	IBV_TRANSPORT_USNIC_UDP,
 };
@@ -555,7 +555,7 @@ struct ibv_mw_bind_info {
 	unsigned int	 mw_access_flags; /* use ibv_access_flags */
 };
 
-struct ibv_pd {
+struct ibv_pd { // SSY protect domain
 	struct ibv_context     *context;
 	uint32_t		handle;
 };
@@ -1649,8 +1649,8 @@ enum {
 
 struct ibv_device {
 	struct _ibv_device_ops	_ops;
-	enum ibv_node_type	node_type;
-	enum ibv_transport_type	transport_type;
+	enum ibv_node_type	node_type; // SSY NIC or switch
+	enum ibv_transport_type	transport_type; // SSY IB or IWARP
 	/* Name of underlying kernel IB device, eg "mthca0" */
 	char			name[IBV_SYSFS_NAME_MAX];
 	/* Name of uverbs device, eg "uverbs0" */

@@ -70,12 +70,15 @@ struct verbs_ex_private {
 
 static inline struct verbs_ex_private *get_priv(struct ibv_context *ctx)
 {
+	// SSY container_of return the upper structure pointer
+	// ibv_pd only have a pointer to ibv_context in verbs_context
+	// SSY again return priv of type verbs_ex_private
 	return container_of(ctx, struct verbs_context, context)->priv;
 }
 
 static inline const struct verbs_context_ops *get_ops(struct ibv_context *ctx)
 {
-	return &get_priv(ctx)->ops;
+	return &get_priv(ctx)->ops; // SSY verbs_ex_private in  libibverbs/ibverbs.h 
 }
 
 #define IBV_INIT_CMD(cmd, size, opcode)					\

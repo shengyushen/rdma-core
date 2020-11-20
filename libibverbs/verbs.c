@@ -222,7 +222,7 @@ LATEST_SYMVER_FUNC(ibv_alloc_pd, 1_1, "IBVERBS_1.1",
 {
 	struct ibv_pd *pd;
 
-	pd = get_ops(context)->alloc_pd(context);
+	pd = get_ops(context)->alloc_pd(context); // SSY providers/mlx5/mlx5.c 
 	if (pd)
 		pd->context = context;
 
@@ -237,7 +237,7 @@ LATEST_SYMVER_FUNC(ibv_dealloc_pd, 1_1, "IBVERBS_1.1",
 }
 
 LATEST_SYMVER_FUNC(ibv_reg_mr, 1_1, "IBVERBS_1.1",
-		   struct ibv_mr *,
+		   struct ibv_mr *, // libibverbs/verbs.h 
 		   struct ibv_pd *pd, void *addr,
 		   size_t length, int access)
 {
@@ -245,8 +245,9 @@ LATEST_SYMVER_FUNC(ibv_reg_mr, 1_1, "IBVERBS_1.1",
 
 	if (ibv_dontfork_range(addr, length))
 		return NULL;
-
-	mr = get_ops(pd->context)->reg_mr(pd, addr, length, access);
+	// SSY get_ops return verbs_context_ops in libibverbs/driver.h 
+	// there are lots of ops in libibverbs/verbs.h, so I need to use get_ops to abstract 
+	mr = get_ops(pd->context)->reg_mr(pd, addr, length, access); // SSY reg_mr is actually come from providers/mlx5/mlx5.c, such as mlx345
 	if (mr) {
 		mr->context = pd->context;
 		mr->pd      = pd;

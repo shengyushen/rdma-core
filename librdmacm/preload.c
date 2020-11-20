@@ -847,7 +847,8 @@ ssize_t sendmsg(int socket, const struct msghdr *msg, int flags)
 	return (fd_fork_get(socket, &fd) == fd_rsocket) ?
 		rsendmsg(fd, msg, flags) : real.sendmsg(fd, msg, flags);
 }
-
+// SSY writing to socket?
+// seems that D is also communicate in this way
 ssize_t write(int socket, const void *buf, size_t count)
 {
 	int fd;

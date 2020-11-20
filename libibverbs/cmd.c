@@ -118,7 +118,6 @@ int ibv_cmd_query_device(struct ibv_context *context,
 	struct ib_uverbs_query_device_resp resp;
 
 	IBV_INIT_CMD_RESP(cmd, cmd_size, QUERY_DEVICE, &resp, sizeof resp);
-
 	if (write(context->cmd_fd, cmd, cmd_size) != cmd_size)
 		return errno;
 
@@ -412,6 +411,7 @@ int ibv_cmd_reg_mr(struct ibv_pd *pd, void *addr, size_t length,
 	cmd->pd_handle 	  = pd->handle;
 	cmd->access_flags = access;
 
+	// SSY librdmacm/preload.c 
 	if (write(pd->context->cmd_fd, cmd, cmd_size) != cmd_size)
 		return errno;
 
