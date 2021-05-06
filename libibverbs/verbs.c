@@ -251,7 +251,7 @@ LATEST_SYMVER_FUNC(ibv_reg_mr, 1_1, "IBVERBS_1.1",
 	if (mr) {
 		mr->context = pd->context;
 		mr->pd      = pd;
-		mr->addr    = addr;
+		mr->addr    = addr; // SSY return mr->addr is the same input addr , why bother????
 		mr->length  = length;
 	} else
 		ibv_dofork_range(addr, length);
